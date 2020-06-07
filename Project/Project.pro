@@ -16,5 +16,6 @@ HEADERS += \
     Bullet.h \
     EnemyBullet.h \
     Player.h \
-    T-90.h \
+    Spawner.h \
+    Enemy.h \
     formation.h

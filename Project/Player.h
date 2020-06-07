@@ -18,25 +18,22 @@ public:
     void bounce2(const sf::Time &elapsed, float movespeed)
     {
         auto bounds = player.getGlobalBounds();
-        std::cout<<bounds.left<<std::endl;
-
-
-        if (bounds.left + bounds.width > 1920&&sf::Keyboard::D)
+        if (bounds.left + bounds.width > 1920)
         {
             player.move(-movespeed * elapsed.asSeconds(), 0);
         }
 
 
-        if (bounds.left < 0&&sf::Keyboard::S)
+        if (bounds.left < 0)
         {
             player.move(movespeed * elapsed.asSeconds(),0);
         }
 
-        if (bounds.top < 0&&sf::Keyboard::W)
+        if (bounds.top < 0)
         {
             player.move(0, movespeed * elapsed.asSeconds());
         }
-        if (bounds.top + bounds.height > 1080&&sf::Keyboard::S)
+        if (bounds.top + bounds.height > 1080)
         {
             player.move(0, -movespeed * elapsed.asSeconds());
         }
@@ -72,25 +69,24 @@ public:
         window.draw(player);
     }
 
-    double checkColl(EnemyBullet bullet) {
+    bool checkColl(EnemyBullet bullet) {
        if (player.getGlobalBounds().contains(bullet.getRight(), bullet.getBottom()))
         {
-            std::cout<<"Gracz Trafiony!"<<std::endl;
-           bullet.setPos(sf::Vector2f(-100000000,-1000000000));
             health=health-1;
-           if(health<0)
-           {
-            return -10;
-
-           }
+           return true;
         }
     }
+    int GetHealth()
+    {
+        return health;
+    }
 int score=0;
-int health=100;
+
 private:
 
     sf::Texture t1;
     sf::Sprite player;
+    int health=10;
 
 
 };

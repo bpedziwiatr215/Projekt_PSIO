@@ -36,6 +36,10 @@ public:
 
             }
     }
+    float GetDirection()
+    {
+        return moveSpeed;
+    }
 
 
 private:

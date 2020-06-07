@@ -2,7 +2,6 @@
 #define BULLET_H
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-//#include "T-90.h"
 class Bullet {
 public:
     Bullet(sf::Vector2f size) {
@@ -38,12 +37,6 @@ public:
         bullet.setPosition(newPos);
     }
 
-   // void checkColl(enemy enemy) {
-//        if (enemy.getGlobalBounds().contains(getRight(),getBottom()))
-   //     {
-      //      setPos(sf::Vector2f(-100000000,-1000000000));
-     //   }
- //   }
 sf::RectangleShape bullet;
 
 private:
