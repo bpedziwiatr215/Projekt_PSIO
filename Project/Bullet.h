@@ -1,6 +1,5 @@
 #ifndef BULLET_H
 #define BULLET_H
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 class Bullet {
 public:
