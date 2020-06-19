@@ -15,7 +15,7 @@ int main()
 //muzyka oraz dzwiek
 //-------------------------------------------------------------------------------------------------------------------------------------
     sf::Music music;
-    music.openFromFile("Sound/Main.wav");
+    music.openFromFile("Sound/Main.ogg");
     music.play();
 
     sf::SoundBuffer Laser;
