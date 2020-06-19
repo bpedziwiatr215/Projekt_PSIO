@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
-#include <sstream>
 #include "Bullet.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -54,7 +53,7 @@ int main()
     ScoreCount.setFont(font);
     sf::Text Time= TextGenerator("0",100,sf::Color::Green,0,0);
     Time.setFont(font);
-    sf::Text Game=TextGenerator("GAME OVER",170,sf::Color::Red,0,100);
+    sf::Text Game=TextGenerator("GAME OVER",180,sf::Color::Red,0,140);
     Game.setFont(font);
     sf::Text PlayerHealth=TextGenerator("10",100,sf::Color::Red,0,900);
     PlayerHealth.setFont(font);
@@ -76,8 +75,8 @@ int main()
     formation collisionbox(sf::Vector2f(1052.0, 400.0), sf::Vector2f(0.0, 100.0)); //utworzenie tla formacji obcych obslugujacego zmiane kierunku lotu UFO
     collisionbox.setFillColor(sf::Color::Transparent);
 
-    std::vector<Bullet> bulletVec; // deklaracje wektorow ktore beda przechowywac pociski
-    std::vector<EnemyBullet> EnemybulletVec;
+    std::vector<Bullet*> bulletVec; // deklaracje wektorow ktore beda przechowywac pociski
+    std::vector<EnemyBullet*> EnemybulletVec;
 
 
 //deklaracje oraz definicje potrzebych zmiennych
@@ -201,6 +200,7 @@ int main()
                 if(collisionbox.GetDirection()!=alienVec[i].GetVelocity())
                     alienVec[i].changecourse();
             }
+
         }
 //obsluga wystrzalow gracza
 //----------------------------------------------------------------------------------------------------------------------------------------
@@ -212,8 +212,8 @@ int main()
 
         if(isFiring == true)//strzelanie gracza (tworzenie pociskow)
         {
-            Bullet newBullet(sf::Vector2f(3, 25));
-            newBullet.setPos(sf::Vector2f(player.getX()+45, player.getY()));
+            Bullet* newBullet= new Bullet(sf::Vector2f(3, 25));
+            newBullet->setPos(sf::Vector2f(player.getX()+45, player.getY()));
             bulletVec.push_back(newBullet);
             FriendlyGun.play();
             isFiring=false;
@@ -237,8 +237,8 @@ int main()
         {
             if(alienVec[RandomAlienNumber].getX()>0)
             {
-                EnemyBullet newEnemyBullet(sf::Vector2f(5, 25));
-                newEnemyBullet.setPos(sf::Vector2f(alienVec[RandomAlienNumber].getX()+45, alienVec[RandomAlienNumber].getY()+20));
+                EnemyBullet* newEnemyBullet = new EnemyBullet(sf::Vector2f(5, 25));
+                newEnemyBullet->setPos(sf::Vector2f(alienVec[RandomAlienNumber].getX()+45, alienVec[RandomAlienNumber].getY()+20));
                 EnemybulletVec.push_back(newEnemyBullet);
                 EnemyGun.play();
                 isEnemyFiring=false;
@@ -250,19 +250,19 @@ int main()
         {
             for( auto &it : alienVec)
             {
-                if(it.checkColl(bulletVec[i])==true)
+                if(it.checkColl(*bulletVec[i])==true)
                 {
                     Score=Score+300;
-                    bulletVec[i].setPos(sf::Vector2f(-100,-100));
+                    bulletVec[i]->setPos(sf::Vector2f(-100,-100));
                 }
             }
         }
         for (size_t i = 0; i < EnemybulletVec.size(); i++)
         {
-            if(player.checkColl(EnemybulletVec[i])==true)
+            if(player.checkColl(*EnemybulletVec[i])==true)
             {
                 Score=Score-1000;
-                EnemybulletVec[i].setPos(sf::Vector2f(5000,5000));
+                EnemybulletVec[i]->setPos(sf::Vector2f(900,1500));
             }
         }
 
@@ -291,6 +291,26 @@ int main()
              SpeedTransactionCount++;
              player.Boost();
          }
+//usuwanie zbednych pociskow
+//---------------------------------------------------------------------------------------------------------------------------------------
+         for (auto i = EnemybulletVec.begin(); i !=EnemybulletVec.end();)
+         {
+             if ((*i)->getBottom()>1000)
+             {
+                 delete (*i);
+                 i=EnemybulletVec.erase(i);
+             }
+             else i++;
+         }
+         for (auto i = bulletVec.begin(); i !=bulletVec.end();)
+         {
+             if ((*i)->getBottom()<0)
+             {
+                 delete (*i);
+                 i=bulletVec.erase(i);
+             }
+             else i++;
+         }
 //update wyswietlanych licznikow
 //----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -313,19 +333,19 @@ int main()
         window.draw(collisionbox);
         for (size_t i = 0; i < EnemybulletVec.size(); i++)
         {
-            if(EnemybulletVec[i].getTop()<1080)
+            if(EnemybulletVec[i]->getTop()<1080)
             {
-                EnemybulletVec[i].draw(window);
-                EnemybulletVec[i].fire(0.3);
+                EnemybulletVec[i]->draw(window);
+                EnemybulletVec[i]->fire(0.3);
             }
         }
 
         for (size_t i = 0; i < bulletVec.size(); i++)
         {
-            if(bulletVec[i].getTop()>0)
+            if(bulletVec[i]->getTop()>0)
             {
-            bulletVec[i].draw(window);
-            bulletVec[i].fire(3);
+            bulletVec[i]->draw(window);
+            bulletVec[i]->fire(3);
             }
         }
 

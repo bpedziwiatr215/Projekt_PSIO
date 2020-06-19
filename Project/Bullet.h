@@ -7,7 +7,7 @@ public:
         bullet.setSize(size);
         bullet.setFillColor(sf::Color::Yellow);
     }
-
+    ~Bullet() = default;
     void fire(int speed) {
         bullet.move(0, -speed);
     }

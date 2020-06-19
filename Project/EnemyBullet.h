@@ -10,6 +10,7 @@ public:
         bullet2.setFillColor(sf::Color::Magenta);
     }
 
+    ~EnemyBullet() = default;
     void fire(float speed)
     {
         bullet2.move(0, speed);
